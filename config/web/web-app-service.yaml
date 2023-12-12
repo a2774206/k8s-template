@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-app-service
+spec:
+  selector:
+    app: web-app # 这个标签应该与 deployment中的匹配
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+      nodePort: 30005 # NodePort 类型的 Service 在节点上公开的端口
+  type: NodePort # 根据需要选择 Service 的类型

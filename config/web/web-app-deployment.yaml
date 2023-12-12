@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-app-deployment # Deployment 的名称
+spec:
+  replicas: 3 # 根据需要调整副本数
+  selector:
+    matchLabels:
+      app: web-app # 这个标签应该与 service中的匹配
+  template:
+    metadata:
+      labels:
+        app: web-app  # Pod 模板的标签，用于选择 Pods 和标记 Pods
+    spec:
+      containers:
+      - name: web-app-container # 容器的名称
+        image: web-app # 容器的镜像
+        ports:
+        - containerPort: 80 # 容器监听的端口
+		imagePullPolicy: IfNotPresent # 默认是 IfNotPresent，如果设置为 Always，则会尝试从远程仓库拉取。

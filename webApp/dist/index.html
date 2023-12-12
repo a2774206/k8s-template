@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>k8s-webApp-page</title>
+		<style>
+			.h1,
+			#result,
+			h2 {
+				text-align: center;
+				padding-top: 40px;
+			}
+
+			h2 {
+				color: #000;
+			}
+
+			*:not(h2) {
+				color: green;
+			}
+		</style>
+		<!-- 引入 jQuery 库 -->
+		<script src="./assets/js/jquery-3.6.4.min.js"></script>
+	</head>
+	<body>
+
+		<h2>k8s前后端服务测试</h2>
+		<div class="h1">k8s测试前端服务已启动!</div>
+		<div id="result">数据请求中。。</div>
+
+		<!-- 你的其他 HTML 元素 -->
+
+		<!-- 在这里添加 JavaScript 代码 -->
+		<script>
+			let backendApiUrl = null;
+
+			function getApiUrl() {
+				// 发起请求获取后端服务地址
+				return new Promise((resolve, reject) => {
+					fetch('./config.js')
+						.then(response => response.json())
+						.then(data => {
+							backendApiUrl = data.backendApiUrl;
+							resolve(backendApiUrl);
+							// 在这里开始你的应用
+						}).catch(() => {
+							reject();
+						})
+				})
+			}
+			// 使用 jQuery 发起 AJAX 请求
+			$(document).ready(async function() {
+				// 当页面加载完成后执行这个函数
+
+				let url = await getApiUrl();
+
+				function handleJsonpResponse(data) {
+					document.getElementById('result').innerHTML = '<center>' + data.message + '</center>'
+				}
+
+				// 使用 jQuery 发起 JSONP 请求
+				$.ajax({
+					url,
+					dataType: 'jsonp',
+					jsonp: 'callback', // 指定回调函数参数名，一般是 'callback'
+					success: function(data) {
+						// 请求成功时调用此回调函数
+						handleJsonpResponse(data);
+					},
+					error: function(error) {
+						// 请求失败时调用此回调函数
+						console.error('Error:', error);
+					}
+				});
+
+
+
+			});
+		</script>
+	</body>
+</html>

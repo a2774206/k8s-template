@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-server-deployment
+spec:
+  replicas: 3 # 根据需要调整副本数
+  selector:
+    matchLabels:
+      app: node-server
+  template:
+    metadata:
+      labels:
+        app: node-server
+    spec:
+      containers:
+      - name: node-server-container
+        image: node-server
+        ports:
+        - containerPort: 3000
+		imagePullPolicy: IfNotPresent 	# 默认是 IfNotPresent，如果设置为 Always，则会尝试从远程仓库拉取。
