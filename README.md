@@ -25,4 +25,11 @@
 	$ kubectl apply -f ./config/server/web-app-service.yaml
 	$ kubectl apply -f ./config/server/web-app-deployment.yaml
 	
+	# 安装 Ingress Controller
+	$ kubectl apply -f deploy.yaml
+	# ingress
+	# 忽略 TLS 验证 
+	$ kubectl apply -f ingress-config.yaml --insecure-skip-tls-verify 
+	# 如依旧报错证书问题 测试开发环境可禁用 Admission Webhook 
+	$ kubectl delete -A ValidatingWebhookConfiguration ingress-nginx-admission
 ```

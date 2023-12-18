@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-ingress
+  namespace: default
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/server-snippet: |
+      more_set_headers "Server: $proxy_host";
+      more_set_headers "X-Pod-Name: $upstream_addr";
+    kubernetes.io/ingress.class: "nginx"  # 添加这一行，选择使用的 Ingress Controller
+spec:
+  rules:
+    - host: k.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: web-app-service
+                port:
+                  number: 80
